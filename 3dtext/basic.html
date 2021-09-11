@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<script src='three-min.js'></script>
+<!-- <script src='threex.text.js'></script> -->
+<script>
+var THREEx	= THREEx	|| {}
+THREEx.Text	= function(text, options){
+	options	= options || {
+		font		: "droid serif",
+		weight		: "bold",
+		size		: 1,
+		height		: 0.4,
+	}
+
+	// create the tGeometry
+	var geometry	= new THREE.TextGeometry(text, options)
+
+	// center the geometry
+	// - THREE.TextGeometry isnt centered for unknown reasons. all other geometries are centered
+	geometry.computeBoundingBox();
+	var center	= new THREE.Vector3();
+	center.x	= (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2
+	// center.y	= (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2
+	center.z	= (geometry.boundingBox.max.z - geometry.boundingBox.min.z) / 2
+	geometry.vertices.forEach(function(vertex){
+		vertex.sub(center)
+	})
+	
+	// create a mesh with it
+	var material	= new THREE.MeshNormalMaterial()
+	var mat1 =  new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0xffffff, shininess: 100, shading: THREE.SmoothShading })
+	var mesh	= new THREE.Mesh(geometry, mat1)
+	// return mesh
+	return mesh
+}
+
+</script>
+<script src="fonts/droid/droid_serif_bold.typeface.js"></script>
+<script type='text/javascript' src='Tween.js'></script>
+<body style='margin: 0px; background: url("Blue-Cloud-on-The-Sky.jpg"); background-size:cover; overflow: hidden;'><script>
+	var renderer	= new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+	var onRenderFcts= [];
+	var scene	= new THREE.Scene();
+	var camera	= new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.01, 1000);
+	camera.position.z = 5;
+	
+	//var message = "Sunday Morning\nWorship Service\n10:30am";
+	var message = "Ethan Greene\nBlaster\nTrickshots";
+	var lineSpacing = [0.0,-0.6,-1.2];
+	var lines = message.split("\n");
+	var meshes = new Array();
+	
+	for(var key in lines){	
+		var mesh	= new THREEx.Text(lines[key],{
+			font		: "droid serif",
+			weight		: "bold",
+			size		: .5,
+			height		: 0.15,
+		})
+		meshes.push(mesh);
+	};
+
+	for(var key in meshes){
+		//meshes[key].scale.multiplyScalar(1/4)
+		meshes[key].position.y	= lineSpacing[key];
+		scene.add(meshes[key]);
+	}
+		
+	var light = new THREE.HemisphereLight(0xaaaaaa,0xaaaaaa,1.0); // soft white light
+	//light.position.set( 0, .5, 3 );
+	scene.add( light );	
+	
+	var directionalLight = new THREE.DirectionalLight( 0xff8800, 0.4 );
+	directionalLight.position.set( 0, .5, 3 );
+	scene.add( directionalLight );
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Camera Controls							//
+//////////////////////////////////////////////////////////////////////////////////
+	var startPos = {x : 4, y: -2, z: 4, o:0 };
+	var position = {x : 4, y: -2 -4, z: 4, o:0 };
+	var target = { x : -1, y: 0, z: 4, o:1 };
+	var holdTarget = {x : 1, y: 0, z: 4, o:1 };
+	var doOutAnimation = false;
+	var pingpongSpeed = 3000;
+	var holdTime = pingpongSpeed * 2;
+	var inAnimation = new TWEEN.Tween(position).to(target, 1500).onStart(function(){setTimeout(function(){doOutAnimation = !doOutAnimation;},holdTime);}).onUpdate(function(){checkRotation();}).easing(TWEEN.Easing.Quartic.InOut);
+	var holdAnimationPing = new TWEEN.Tween(position).to(holdTarget, pingpongSpeed).onUpdate(function(){checkRotation();}).onComplete(function(){if(!doOutAnimation){holdAnimationPong.start();}else{outAnimation.start();} }).easing(TWEEN.Easing.Cubic.InOut);
+	var holdAnimationPong = new TWEEN.Tween(position).to(target, pingpongSpeed).onUpdate(function(){checkRotation();}).onComplete(function(){if(!doOutAnimation){holdAnimationPing.start();}else{outAnimation.start();} }).easing(TWEEN.Easing.Cubic.InOut);
+	var outAnimation = new TWEEN.Tween(position).to(startPos, 1500).onUpdate(function(){checkRotation();}).onComplete(function(){doOutAnimation = false; inAnimation.start();}).easing(TWEEN.Easing.Quartic.InOut);;
+	
+	
+	inAnimation.chain(holdAnimationPing);
+	inAnimation.start();
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// CALLED EVERY UPDATE
+	//////////////////////////////////////////////////////////////////////////////////
+	function checkRotation(){
+			var activeAnimation = position;
+			var rotSpeed = 0.001;
+			var x = activeAnimation.x, y = activeAnimation.y, z = activeAnimation.z;
+			camera.position.x = x;
+			camera.position.y = y;
+			camera.position.z = z;
+			
+			for(var key in meshes){
+			meshes[key].material.transparent = true;
+			meshes[key].material.opacity = position.o;
+			};
+			camera.lookAt(scene.position);
+	} 
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the scene						//
+	//////////////////////////////////////////////////////////////////////////////////
+	onRenderFcts.push(function(){
+		renderer.render( scene, camera );
+		TWEEN.update();
+	})
+	//////////////////////////////////////////////////////////////////////////////////
+
+		
+	//////////////////////////////////////////////////////////////////////////////////
+	//		loop runner							//
+	//////////////////////////////////////////////////////////////////////////////////
+	var lastTimeMsec= null
+	requestAnimationFrame(function animate(nowMsec){
+		// keep looping
+		requestAnimationFrame( animate );
+		// measure time
+		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+		lastTimeMsec	= nowMsec
+		// call each update function
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(deltaMsec/1000, nowMsec/1000)
+			
+		})
+	})
+</script></body>

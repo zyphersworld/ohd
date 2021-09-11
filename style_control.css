@@ -1,0 +1,199 @@
+body{
+		font-family: sans-serif;
+	}
+
+	div#header-container{
+		position:fixed;
+		width:100%;
+		height:auto;
+		top:0px;
+		background:#ddd;
+	}
+
+	div#header{
+		text-align:center;
+	}
+
+	div.song{
+		border:solid 0px red;
+		margin:40px 0px;
+		padding: 0px 0px 10px 0px;
+		background:#aaa;
+	}
+
+	.songTitle{
+		background:#aaccff;
+		padding:5px;
+		border-bottom:solid 2px black;
+		border-top: solid 1px black;
+	}
+
+	.songPart{
+		display:inline-block;
+		width:150px;
+		margin:10px;
+		padding:5px;
+		font-size:8pt;
+		border:solid 1px black;
+		vertical-align:top;
+		text-align:center;
+		background:#fff;
+
+	}
+
+	.songTitle{
+		font-size:1em;
+		font-weight:bold;
+		display:block;
+	}
+
+	div#controls{
+		text-align:center;
+		margin:20px 0px 20px 0px;
+		display:relative;
+
+	}
+
+	div#controls button.maincontrols{
+		display:inline-block;
+		width:64px;
+		height:64px;
+		margin:0px 10px 0px 10px;
+		background-color:#aaa;
+		border-radius:11px;
+		border-color:#aaa;
+		border-style:solid;
+
+	}
+
+		div#controls button.disabled{
+		background-color:#ccc;
+		border-radius:11px;
+		border-color:#ccc;
+		border-style:solid;
+		color:#999;
+
+	}
+
+	button:focus {outline:0;}
+
+	div#controls button.activeButton{
+		background-color:#fa0;
+		color:red;
+		font-weight:bold;
+	}
+
+	#dontSleep{
+	vertical-align:top;
+
+	}
+
+	#parts{
+		text-align:center;
+		margin: 150px auto;
+	}
+
+	.active{
+		background-color:#afa;
+	}
+
+
+	
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+}
+
+/* The Close Button */
+.close {
+    color: #f00;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*
+.hideModal{
+    -webkit-animation-name: animatetopOut;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetopOut;
+    animation-duration: 0.4s
+}
+*/
+
+/* Modal Header */
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Modal Body */
+.modal-body {padding: 2px 16px;text-align:center;}
+
+.modal-body a {font-weight:bold; text-decoration:none; color:#777; font-size:1.5em;display:block; width:50%;margin:0px auto;}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    top: 50%;
+	transform: translateY(-50%);
+/*
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+*/
+}
+
+/* Add Animation */
+/*
+@-webkit-keyframes animatetop {
+    from {top: -300px; opacity: 0} 
+    to {top: 0; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+@-webkit-keyframes animatetopOut {
+    from {top: 0; opacity: 1} 
+    to {top: -300px; opacity: 0}
+}
+
+@keyframes animatetopOut {
+    from {top: 0; opacity: 1}
+    to {top: -300px; opacity: 0}
+}
+*/

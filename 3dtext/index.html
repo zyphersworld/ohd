@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<script src='three-min.js'></script>
+<!--
+<script src='threex.dilategeometry.js'></script>
+<script src='threex.atmospherematerial.js'></script>
+<script src='threex.geometricglowmesh.js'></script>
+-->
+<script src='threex.depthoffield.js'></script>
+<!--
+<script src='threex.text.js'></script>
+-->
+<script>
+////////////////////////////////////////////////////////////////////////	
+// THREEX TEXT FUNCTION
+////////////////////////////////////////////////////////////////////////	
+var THREEx	= THREEx	|| {}
+THREEx.Text	= function(text, options, mat){
+	options	= options || {
+		font		: "droid serif",
+		weight		: "bold",
+		size		: 1,
+		height		: 0.4,
+	}
+
+	// create the tGeometry
+	var geometry	= new THREE.TextGeometry(text, options,mat)
+
+	// center the geometry
+	// - THREE.TextGeometry isnt centered for unknown reasons. all other geometries are centered
+	geometry.computeBoundingBox();
+	var center	= new THREE.Vector3();
+	center.x	= (geometry.boundingBox.max.x - geometry.boundingBox.min.x) / 2
+	// center.y	= (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2
+	center.z	= (geometry.boundingBox.max.z - geometry.boundingBox.min.z) / 2
+	geometry.vertices.forEach(function(vertex){
+		vertex.sub(center)
+	})
+	var mesh	= new THREE.Mesh(geometry, mat)
+	// return mesh
+	return mesh
+}
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////	
+</script>
+
+
+<script src="fonts/droid/droid_serif_bold.typeface.js"></script>
+<script type='text/javascript' src='Tween.js'></script>
+<body style='margin: 0px; overflow: hidden;'>
+	
+<script>
+	var renderer	= new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+	var onRenderFcts= [];
+	var scene	= new THREE.Scene();
+	//scene.fog = new THREE.Fog(0xffeeaa, 800, 1010);
+	//scene.fog = new THREE.FogExp2(0xbbbbbb,0.0018);
+	var camera	= new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 100000);
+	camera.position.z = 0;
+		
+		
+	//var depthOfField= new THREEx.DepthOfField(renderer);
+	
+		
+		
+	//~ //SKY SPHERE
+	var image_sky = "Melbourne_Docklands_-_Yarras_Edge_-_marina_panorama.jpg";
+	var skyGeo = new THREE.SphereGeometry(1000, 100, 100);
+	var texture = THREE.ImageUtils.loadTexture(image_sky);
+	var material = new THREE.MeshBasicMaterial({ 
+        map: texture, shading: THREE.SmoothShading 
+	});
+	
+	//~ texture.wrapS = THREE.RepeatWrapping;
+	//~ texture.wrapT = THREE.RepeatWrapping;
+	//~ texture.repeat.set( 10, 10 );
+	var sky = new THREE.Mesh(skyGeo, material);
+    sky.material.side = THREE.BackSide;
+    scene.add(sky);
+	
+	
+	//Create cube camera
+	var cubeCamera = new THREE.CubeCamera( 1, 100000, 128 );
+	cubeCamera.position.x = -180;
+	scene.add( cubeCamera );
+	var chromeEnvMap = cubeCamera.renderTarget;
+	//var chromeMaterial = new THREE.MeshPhongMaterial( { color: 0xffaa11, specular: 0xffffff, shininess: 0, shading: THREE.FlatShading, envMap: cubeCamera.renderTarget } );
+	var chromeMaterial = new THREE.MeshPhongMaterial( { color: 0xffaa11, specular: 0xffffff, shininess: 0, shading: THREE.FlatShading, envMap: chromeEnvMap } );
+	//var chromeMaterial = new THREE.MeshBasicMaterial( {color: 0xff0000,specular: 0xffffff});
+	//var chromeMaterial = new THREE.MeshLambertMaterial( { color: 0xffaa00, specular: 0xffffff,envMap: cubeCamera.renderTarget } );
+	
+	var light = new THREE.HemisphereLight(0xaaaaaa,0xaaaaaa,.45); // soft white light
+	light.position.set( 0, .5, 3 );
+	scene.add( light );	
+
+	//~ var directionalLight = new THREE.DirectionalLight( 0xffaa00, .8 );
+	//~ directionalLight.position.set( 0, .8, 50 );
+	//~ scene.add( directionalLight );
+	
+	var directionalLight2 = new THREE.DirectionalLight( 0xffffff, .8 );
+	directionalLight2.position.set( 0, 0, 0.1 );
+	scene.add( directionalLight2 );
+	
+	var directionalLight3 = new THREE.SpotLight( 0xff0000, 1 );
+	directionalLight3.position.set( -100, 1000, -100 );
+	scene.add( directionalLight3 );
+	
+	
+	
+	var message = "Sunday Morning\nWorship Service\n10:30am";
+	//var message = "Peter Greene\nSprit Growth Series\nSeminar";
+	//var message = "Ethan Greene\nBlaster\nTrickshots";
+	//var message = "Melody's Room\nIs Now\nClean!!";
+	//var message = "Andrea Greene\nIs A\nHypo Head";
+
+	var lineSpacing = [0.6,-.1,-0.8];
+	var lines = message.split("\n");
+	var meshes = new Array();
+	
+	for(var key in lines){	
+		var mesh	= new THREEx.Text(lines[key],{
+			font		: "droid serif",
+			weight		: "bold",
+			size		: 1,
+			height		: 0.15,
+		},chromeMaterial) //reflectionMaterial
+		meshes.push(mesh);
+	
+	};
+
+
+	for(var key in meshes){
+		meshes[key].scale.multiplyScalar(1/2)
+		meshes[key].position.y	= lineSpacing[key];
+		//var glowMesh	= new THREEx.GeometricGlowMesh(meshes[key]);
+		//meshes[key].add(glowMesh.object3d)
+		scene.add(meshes[key]);
+	}
+	
+	
+	
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Camera Controls							//
+//////////////////////////////////////////////////////////////////////////////////
+	var startPos = {x : 1.5, y: 1.5, z: 1.5, o:0 };
+	var position = {x : 1.5, y: 1.5, z: 1.5, o:0 };
+	
+	var target = { x: 0, y: 0, z: 3, o:1 };
+
+	var holdTarget = {x: 0.2, y: .2, z: 3, o:1 };
+	var holdStart =  {x: -0.2, y: -0.2, z: 3, o:1 };
+	
+	var doOutAnimation = false;
+	var pingpongSpeed = 3000;
+	var holdTime = pingpongSpeed * 4;
+
+	var inAnimation = new TWEEN.Tween(position).to(target, 3000).
+								onStart(function(){
+												setTimeout(function(){
+														doOutAnimation = !doOutAnimation;
+												},holdTime);
+								}).
+								onUpdate(function(){
+										checkRotation();
+								}).
+								easing(TWEEN.Easing.Quartic.InOut);
+	
+
+
+	var holdAnimationPing = new TWEEN.Tween(position).to(holdTarget, pingpongSpeed).
+										onUpdate(function(){
+															checkRotation();
+										}).
+										onComplete(function(){
+															if(!doOutAnimation){
+																holdAnimationPong.start();
+															}else{
+																outAnimation.start();
+															} 
+										}).
+										easing(TWEEN.Easing.Sinusoidal.InOut);
+	
+
+
+	var holdAnimationPong = new TWEEN.Tween(position).to(holdStart, pingpongSpeed).
+										onUpdate(function(){
+															checkRotation();
+										}).
+										onComplete(function(){
+															if(!doOutAnimation){
+																holdAnimationPing.start();
+															}else{
+																outAnimation.start();
+															} 
+										}).
+										easing(TWEEN.Easing.Sinusoidal.InOut);
+	
+	
+	
+	var outAnimation = new TWEEN.Tween(position).to(startPos, 1500).
+								onUpdate(function(){
+												checkRotation();
+								}).
+								onComplete(function(){
+													doOutAnimation = false; inAnimation.start();
+								}).
+								easing(TWEEN.Easing.Quartic.InOut);
+	
+	
+	inAnimation.chain(holdAnimationPing);
+	inAnimation.start();
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// CALLED EVERY UPDATE
+	//////////////////////////////////////////////////////////////////////////////////
+	function checkRotation(){
+			var activeAnimation = position;
+			var rotSpeed = 0.001;
+			var x = activeAnimation.x, y = activeAnimation.y, z = activeAnimation.z;
+			camera.position.x = x;
+			camera.position.y = y;
+			camera.position.z = z;
+			
+			for(var key in meshes){
+			meshes[key].material.transparent = true;
+			meshes[key].material.opacity = position.o;
+			};
+			camera.lookAt(scene.position);
+			cubeCamera.updateCubeMap( renderer, scene );
+			//depthOfField.render(scene, camera);
+	} 
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the scene						//
+	//////////////////////////////////////////////////////////////////////////////////
+	onRenderFcts.push(function(){
+		renderer.render( scene, camera );
+		
+			//cubeCamera.updateCubeMap( renderer, scene );
+			//~ sphere.visible = false;
+			//~ cubeCamera.updateCubeMap(renderer, scene);
+			//~ sphere.visible = true;
+		TWEEN.update();
+	})
+	//////////////////////////////////////////////////////////////////////////////////
+
+		
+	//////////////////////////////////////////////////////////////////////////////////
+	//		loop runner							//
+	//////////////////////////////////////////////////////////////////////////////////
+	var lastTimeMsec= null
+	requestAnimationFrame(function animate(nowMsec){
+		// keep looping
+		requestAnimationFrame( animate );
+		// measure time
+		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+		lastTimeMsec	= nowMsec
+		// call each update function
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(deltaMsec/1000, nowMsec/1000)
+			
+		})
+	})
+</script>
+
+ 
+</body>

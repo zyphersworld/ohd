@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="Cache-control" content="no-store">
+		<!-- Always force latest IE rendering engine (even in intranet) -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<title>OHD Control</title>
+	<script src="jquery-2.2.0.min.js"></script>
+	<script src="socket.io.min.js"></script>
+	<script src="NoSleep.min.js"></script>
+	<script src="clicker.js"></script>
+	<!-- RESET CSS -->
+	<link rel='stylesheet' href='reset.css' />
+
+	<!-- MAIN CSS -->
+	<link rel='stylesheet' href='style_control.css' />
+
+	<!-- FONT AWESOME -->
+	<link rel='stylesheet' href='font-awesome/css/font-awesome.min.css' />
+
+</head>
+
+<body>
+	<!-- MODALS -->
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+<!-- Modal content -->
+<div class="modal-content">
+
+  <div class="modal-header">
+    <span class="close">×</span>
+    &nbsp;
+  </div>
+
+  <div class="modal-body" id="modalMessage">
+    
+  </div>
+
+  <div class="modal-footer">
+    &nbsp;
+  </div>
+
+</div>
+</div>
+	
+	
+	<!-- END MODALS -->
+<!-- ###################################################### CONTENT -->
+	<div id="header-container">
+		<div id="header">
+<!--
+			<h1>Overhead Control</h1>
+-->
+
+			<div id="controls">
+					<button title="Stop Mobile Device From Disconnecting" id="dontSleep" class="maincontrols">Stay Awake</button>
+					<button title="Fade Text Out" id="textFadeButton" class="maincontrols"><i class="fa fa-3x fa-adn"></i></button>
+					<button title="Blank The Screen" id="screenFadeButton"  class="maincontrols"><i class="fa fa-3x fa-square"></i></button>
+					<button title="Play or Stop Video" id="videoPlayButton"  class="maincontrols" ><i class="fa fa-3x fa-film"></i></button>
+					<button title="Timer" id="timerButton"  class="maincontrols" ><i class="fa fa-3x fa-clock-o"></i></button>
+					<button title="Slides" id="slidesButton"  class="maincontrols" ><i class="fa fa-3x fa-slideshare"></i></button>
+					<button title="Slides" id="refreshPageButton"  class="maincontrols" ><i class="fa fa-3x fa-refresh"></i></button>
+					<button title="Slides" id="refreshControlPageButton"  class="maincontrols" ><i class="fa fa-3x fa-refresh"></i></button>
+<!--	
+					<button title="Scripture" id="scriptureButton"  class="maincontrols disabled" ><i class="fa fa-3x fa-book"></i></button>
+					<button title="Custom Message" id="customMessageButton"  class="maincontrols disabled"><i class="fa fa-3x fa-font"></i></button>
+					<button title="Load Service" id="loadServiceButton"  class="maincontrols disabled"><i class="fa fa-3x fa-calendar-o"></i></button>
+-->
+			</div>
+		</div>
+	</div>
+
+	<div id="parts"></div>
+
+
+<script src="control.js"></script>
+</body>
+</html>

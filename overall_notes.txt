@@ -1,0 +1,24 @@
+#start apache server
+sudo lampp startapache
+
+# start nodejs OHD server
+nodejs /opt/lampp/htdocs/ohd3/ohd/ohd.js
+
+# start nodejs SLIDES server
+nodejs /opt/lampp/htdocs/ohd3/reveal_control/rc.js
+
+# links are:
+#
+# MAIN DISPLAY
+# http://192.168.0.129/ohd3/
+#
+# MAIN CONTROL PAGE
+# http://192.168.0.129/ohd3/control.html
+#
+# SLIDE CONTROL PAGE
+# http://192.168.0.129/ohd3/slidecontrol.php
+#
+# SLIDE CREATION PAGE
+# http://192.168.0.129/ohd3/slideuploader/
+#
+#

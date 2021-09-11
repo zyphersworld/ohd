@@ -1,0 +1,79 @@
+json file representing each song
+
+order
+title
+sections[]
+background[]
+
+
+{
+"sunday":[
+				[
+					"order":"0",
+					"title":"HAPPY DAY",
+					"sections":{
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					},
+					"background":[],
+					"copyright":"copyright Information goes here"
+				],
+
+				[
+					"order":"1",
+					"title":"STAY",
+					"sections":{
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					},
+					"background":[],
+					"copyright":"copyright Information goes here"
+				]
+		],
+"wednesday":[
+				[
+					"order":"0",
+					"title":"HAPPY DAY",
+					"sections":{
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					},
+					"background":[],
+					"copyright":"copyright Information goes here"
+				],
+
+				[
+					"order":"1",
+					"title":"STAY",
+					"sections":[
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					],
+					"background":[],
+					"copyright":"copyright Information goes here"
+				]
+		],
+"special":[
+				[
+					"order":"0",
+					"title":"HAPPY DAY",
+					"sections":[
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					],
+					"background":[],
+					"copyright":"copyright Information goes here"
+				],
+
+				[
+					"order":"1",
+					"title":"STAY",
+					"sections":[
+							"English":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"],
+							"Chinese":["title","Verse 1 Text","Chorus Text","Verse 2 Text","Verse 3 Text"]
+					],
+					"background":[],
+					"copyright":"copyright Information goes here"
+				]
+		]
+}
